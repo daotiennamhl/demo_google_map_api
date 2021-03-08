@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #map {
+        height: 600px;
+        width: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>My google map demo</h3>
+    <div id="map"></div>
+    <script>
+      function initMap() {
+        // long lat
+        var FPTUniverse = [21.013430248238773, 105.5270750314157];
+        var TuanCuongInn = [21.003044391796315, 105.52083187975794];
+        var FSchool = [21.01350036318848, 105.5233843033627];
+        var NgocLanBunBoHue = [21.015398364137933, 105.51908881897234];
+        // icon for marker
+        const iconBase =
+          "https://developers.google.com/maps/documentation/javascript/examples/full/images/";
+        const icons = {
+          parking: {
+            icon: iconBase + "parking_lot_maps.png",
+          },
+          library: {
+            // icon: iconBase + "library_maps.png",
+            icon: "http://maps.google.com/mapfiles/kml/pal2/icon32.png",
+          },
+          info: {
+            icon: iconBase + "info-i_maps.png",
+          },
+        };
+        // location
+        const locations = [
+          {
+            position: {
+              lat: FPTUniverse[0],
+              lng: FPTUniverse[1],
+            },
+            map,
+            title: "FPT Universe",
+            icon: icons["library"].icon,
+            content: "Trường FPT là trường 3 chữ F P T",
+          },
+          {
+            position: {
+              lat: TuanCuongInn[0],
+              lng: TuanCuongInn[1],
+            },
+            map,
+            title: "Tuan Cuong inn",
+            icon: icons["library"].icon,
+          },
+          {
+            position: {
+              lat: FSchool[0],
+              lng: FSchool[1],
+            },
+            map,
+            title: "Fschool",
+            icon: icons["library"].icon,
+          },
+          {
+            position: {
+              lat: NgocLanBunBoHue[0],
+              lng: NgocLanBunBoHue[1],
+            },
+            map,
+            title: "Bún bò Huế Ngọc Lan",
+            icon: icons["library"].icon,
+          },
+        ];
+
+        // New map
+        var map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 15,
+          center: locations[0].position,
+        });
+
+        var mapLabel = new google.maps.MapLabel({
+          text: "Test",
+          position: new google.maps.LatLng(...FPTUniverse),
+          map: map,
+          fontSize: 35,
+          align: "right",
+        });
+
+        const markers = [];
+
+        // Add marker
+        var infoWindow;
+        var oldInfoWindow = -1;
+        for (let i = 0; i < locations.length; i++) {
+          markers[i] = new google.maps.Marker({
+            position: locations[i].position,
+            icon: locations[i].icon,
+            map: map,
+            title: locations[i].title,
+            label: "day la label",
+          });
+          // add infoWindow
+          markers[i].addListener("click", () => {
+            console.log(i);
+            if (oldInfoWindow >= 0)
+              infoWindow.close(map, markers[oldInfoWindow]);
+            infoWindow = new google.maps.InfoWindow({
+              content: locations[i].content || "chua co con tent",
+            });
+            infoWindow.open(map, markers[i]);
+            oldInfoWindow = i;
+          });
+        }
+
+        // Add event
+        // google.maps.event.addListener(map, 'click', function(event) {
+        //     const marker = new google.maps.Marker({
+        //         position: event.latLng,
+        //         map: map
+        //     })
+        // })
+      }
+    </script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDl-X3iSHp0I9UmwFDbiyb_NqnTHKmptWc&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+  </body>
+</html>
